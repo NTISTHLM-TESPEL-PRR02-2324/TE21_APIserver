@@ -8,6 +8,7 @@ TeacherData data = new();
 app.MapGet("/", GetSomething);
 app.MapGet("/hello", () => "Goodbye!");
 app.MapGet("/teachers/{number}", data.GetTeacher);
+app.MapGet("/teachers", data.GetAllTeachers);
 
 app.MapPost("/teachers", data.PostTeacher);
 
@@ -28,9 +29,10 @@ class TeacherData
     new Teacher() {Name = "Lena", HitPoints = 9000}
   };
 
-  public IResult PostTeacher()
+  public IResult PostTeacher(Teacher t)
   {
-    Console.WriteLine("Yay");
+    teachers.Add(t);
+    Console.WriteLine(t.Name + " tillagd");
     return Results.Ok();
   }
 
@@ -41,5 +43,10 @@ class TeacherData
       return Results.NotFound();
     }
     return Results.Ok(teachers[number]);
+  }
+
+  public IResult GetAllTeachers()
+  {
+    return Results.Ok(teachers);
   }
 }
